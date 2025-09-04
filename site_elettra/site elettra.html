@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitação de Compras</title>
+    <style>
+        /* Estilos anteriores mantidos */
+        /* Logo fixa no canto superior direito */
+        .logo-fixa {
+            position: static; /*Imagem não fixa com a rolagem*/
+            top: 10px;
+            left: 10px;
+            z-index: 9999;
+        }
+        .logo-fixa img {
+            height: 50px; /* ajuste o tamanho conforme necessário */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.5;
+            background-color: #2F5597; /* Fundo azul Ênfase 1, + escuro 25% #2F5597*/
+            color: white; /* Texto padrão branco no fundo */
+        }
+
+        form { /* CSS resposável por definir o quadro do formulário */
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: black; /* texto do formulário volta a ser preto */
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative; /* necessário para o z-index funcionar */
+            z-index: 10001; /* garante que o header fique acima de elementos fixos (logo etc) */
+        }
+
+        .header-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: white; /* Título branco */
+        }
+
+        .welcome-message {
+            font-size: 1.2em;
+            margin: 20px 0;
+            color: white; /* Mensagem de boas-vindas branca */
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo img {
+            max-width: 150px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative; /* para que z-index funcione se necessário */
+        }
+
+        .action-button.add {
+            background-color: #ffa319; /* #3498db */
+        }
+
+        .action-button.add:hover {
+            background-color: #2980b9;
+        }
+
+        .action-button.remove {
+            background-color: #e74c3c;
+        }
+
+        .action-button.remove:hover {
+            background-color: #c0392b;
+        }
+
+        .campo-grupo {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .campo-grupo div {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        label .obrigatorio {
+            color: #e74c3c;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        input:invalid, select:invalid, textarea:invalid {
+            border-color: #e74c3c;
+        }
+
+        .small-input {
+            flex: 0 0 48%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px; /* Reduzindo o padding para economizar espaço */
+            text-align: center; /* Centraliza o texto nas células */
+        }
+
+        th {
+            background-color: #f4f4f4;
+            color: black;
+        }
+
+        .btn-icon {
+            border: none;
+            background: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .btn-icon.remove {
+            color: #e74c3c;
+        }
+
+        .btn-icon.attach {
+            color: #000;
+            font-size: 20px;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .styled-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .styled-button:hover {
+            background-color: #2980b9;
+        }
+
+        .styled-button.clear {
+            background-color: #e74c3c;
+        }
+
+        .styled-button.clear:hover {
+            background-color: #c0392b;
+        }
+
+        .styled-button.confirm {
+            background-color: #2ecc71;
+        }
+
+        .styled-button.confirm:hover {
+            background-color: #27ae60;
+        }
+
+        .mensagem {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .mensagem.sucesso {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .mensagem.erro {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .formulario-bloqueado {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .campo-grupo div {
+                flex: 1 0 100%;
+            }
+
+            .action-button {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+
+            table, th, td {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo fixa -->
+    <div class="logo-fixa">
+        <img src="Logo_Elettra.jpg" alt="Logo Elettra">
+    </div>
+
+    <div class="header">
+        <h1>Solicitação de Compras</h1>
+        <div class="welcome-message">
+            SIS_FM39 - SISTEMA DE SOLICITAÇÃO DE COMPRAS.
+        </div>
+        <div class="header-buttons">
+            <!-- Adicionado type="button" para evitar comportamento de submit -->
+            <button id="add-solicitacao" type="button" class="action-button add" onclick="Formulario.novaSolicitacao()">+</button>
+            <button id="remove-solicitacao" type="button" class="action-button remove hidden" onclick="Formulario.removerSolicitacao()">-</button>
+        </div>
+    </div>
+    <form action="#" method="POST" enctype="multipart/form-data" class="hidden" id="form-solicitacao" onsubmit="Formulario.enviarFormulario(event)">
+        <div class="campo-grupo">
+            <div>
+                <label for="numero-sc">Nº da SC Automático</label>
+                <input type="text" id="numero-sc" name="numero-sc" readonly>
+            </div>
+            <div>
+                <label for="data">Data <span class="obrigatorio">*</span></label>
+                <input type="date" id="data" name="data" readonly required>
+            </div>
+        </div>
+
+        <div class="campo-grupo">
+            <div>
+                <label for="projeto">Projeto (OS) <span class="obrigatorio">*</span></label>
+                <input type="text" id="projeto" name="projeto" placeholder="Exemplo: 024/25" required oninput="Validacao.validarNumeroProjeto()">
+                <small id="erro-projeto" class="mensagem erro hidden">Formato inválido. Use o formato 000/00.</small>
+            </div>
+            <div>
+                <label for="tipo-solicitacao">Tipo da Solicitação <span class="obrigatorio">*</span></label>
+                <select id="tipo-solicitacao" name="tipo-solicitacao" required onchange="Validacao.validarTipoSolicitacao()">
+                    <option value="">Selecione...</option>
+                    <option value="normal">Normal - 06 dias úteis</option>
+                    <option value="urgente">Urgente</option>
+                    <option value="regularização">Regularização</option>
+                    <option value="complementar">Complementar</option>
+                    <option value="rotina">Rotina</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="campo-grupo">
+            <div>
+                <label for="solicitante">Solicitante <span class="obrigatorio">*</span></label>
+                <input type="text" id="solicitante" name="solicitante" placeholder="Seu nome completo" required>
+            </div>
+            <div>
+                <label for="email">E-mail <span class="obrigatorio">*</span></label>
+                <input type="email" id="email" name="email" placeholder="seu.email@empresa.com" required>
+            </div>
+        </div>
+
+        <div class="campo-grupo">
+            <div class="small-input">
+                <label for="departamento">Departamento <span class="obrigatorio">*</span></label>
+                <select id="departamento" name="departamento" required>
+                    <option value="">Selecione...</option>
+                    <option value="suprimentos">Suprimentos</option>
+                    <option value="financeiro">Financeiro</option>
+                    <option value="rh">RH</option>
+                    <option value="ti">TI</option>
+                    <option value="transporte">Transporte</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="diretoria-adm">Diretoria Adm</option>
+                    <option value="diretoria-executiva">Diretoria Executiva</option>
+                    <option value="diretoria-comercial">Diretoria Comercial</option>
+                    <option value="logistica">Logística</option>
+                    <option value="compras">Compras</option>
+                    <option value="contratos-pg">Contratos/PG</option>
+                </select>
+            </div>
+            <div class="small-input">
+                <label for="local-entrega">Local de Entrega <span class="obrigatorio">*</span></label>
+                <input type="text" id="local-entrega" name="local-entrega" placeholder="Exemplo: Sede - Aracruz" required>
+            </div>
+        </div>
+
+        <div class="campo-grupo">
+            <div>
+                <label for="data-necessidade">Data de Necessidade <span class="obrigatorio">*</span></label>
+                <input type="date" id="data-necessidade" name="data-necessidade" required onchange="Validacao.validarDataNecessidade()">
+            </div>
+        </div>
+
+        <div class="campo-grupo hidden" id="justificativa-urgencia">
+            <div>
+                <label for="justificativa">Justificativa da Urgência <span class="obrigatorio">*</span> <span title="Descreva por que a solicitação é urgente."ℹ️</span></label>
+                <textarea id="justificativa" name="justificativa" rows="2" placeholder="Descreva a justificativa"></textarea>
+            </div>
+        </div>
+
+        <h2>Itens da Solicitação</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 5%;">Item</th>
+                    <th style="width: 45%;">Descrição do Produto/Serviço <span class="obrigatorio">*</span></th>
+                    <th style="width: 8%;">T.C</th>
+                    <th style="width: 8%;">Qtde <span class="obrigatorio">*</span></th>
+                    <th style="width: 12%;">Unidade <span class="obrigatorio">*</span></th>
+                    <th style="width: 10%;">Anexo</th>
+                    <th style="width: 12%;">Remover Item</th>
+                </tr>
+            </thead>
+            <tbody id="itens">
+                <tr>
+                    <td>1</td>
+                    <td><input type="text" name="descricao[]" required style="width: 100%;"></td>
+                    <td>
+                        <button type="button" class="btn-icon" title="Adicionar texto complementar" onclick="Formulario.toggleTextoComplementar(this)" style="border: 1px solid #ccc; border-radius: 4px; padding: 5px;">📝</button>
+                    </td>
+                    <td><input type="number" name="quantidade[]" min="1" max="99999" required style="width: 80px;"></td>
+                    <td>
+                        <select name="unidade[]" required>
+                            <option value="UND">UND</option>
+                            <option value="CX">CX</option>
+                            <option value="FRD">FRD</option>
+                            <option value="KG">KG</option>
+                            <option value="MT">MT</option>
+                            <option value="PÇ">PÇ</option>
+                            <option value="PT">PT</option>
+                            <option value="LT">LT</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn-icon attach" title="Anexar" aria-label="Anexar arquivo" onclick="Formulario.anexarArquivo(this)">🖇️</button>
+                        <input type="file" name="anexo[]" accept=".pdf,.png,.jpeg,.jpg,.xlsx,.xlsm,.xls,.csv,.html" class="hidden">
+                    </td>
+                    <td>
+                        <button type="button" class="btn-icon remove" title="Remover" aria-label="Remover item" onclick="Formulario.excluirItem(this)">🗑️</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type="button" class="styled-button" onclick="Formulario.adicionarItem()">Adicionar Item</button>
+
+        <button type="button" class="styled-button clear" onclick="Formulario.limparCampos()">Limpar Tudo</button>
+
+        <div class="button-container">
+            <button type="submit" class="styled-button" id="botao-enviar">Enviar Solicitação</button>
+        </div>
+    </form>
+
+    <script>
+        const Formulario = {
+            novaSolicitacao: function() {
+                const form = document.getElementById('form-solicitacao');
+                const removeButton = document.getElementById('remove-solicitacao');
+                const botaoEnviar = document.getElementById('botao-enviar');
+
+                // Limpa os campos do formulário
+                this.limparCampos();
+
+                // Exibe o formulário e o botão de remover
+                form.classList.remove('hidden');
+                removeButton.classList.remove('hidden');
+
+                // Gera o número da SC e preenche a data atual
+                this.gerarNumeroSC();
+                this.preencherDataAtual();
+
+                // Desbloqueia o formulário para nova solicitação
+                form.classList.remove('formulario-bloqueado');
+
+                // Reativa o botão "Enviar Solicitação"
+                botaoEnviar.style.display = 'inline-flex';
+                botaoEnviar.disabled = false;
+
+                // Remove o botão "Solicitação Enviada" se existir
+                const botaoEnviado = document.querySelector('.button-container .styled-button.confirm');
+                if (botaoEnviado) {
+                    botaoEnviado.remove();
+                }
+            },
+
+            removerSolicitacao: function() {
+                const form = document.getElementById('form-solicitacao');
+                const removeButton = document.getElementById('remove-solicitacao');
+
+                // Oculta o formulário e o botão de remover
+                form.classList.add('hidden');
+                removeButton.classList.add('hidden');
+
+                // Limpa os campos do formulário
+                this.limparCampos();
+            },
+
+            gerarNumeroSC: function() {
+                let numeroSC = localStorage.getItem('numeroSC') || 0;
+                numeroSC = parseInt(numeroSC) + 1;
+                localStorage.setItem('numeroSC', numeroSC);
+                document.getElementById('numero-sc').value = numeroSC.toString().padStart(4, '0');
+            },
+
+            preencherDataAtual: function() {
+                const hoje = new Date();
+                hoje.setMinutes(hoje.getMinutes() - hoje.getTimezoneOffset());
+                document.getElementById('data').value = hoje.toISOString().split('T')[0];
+            },
+
+            limparCampos: function() {
+                // Limpa os campos do formulário
+                document.getElementById('form-solicitacao').reset();
+                document.getElementById('numero-sc').value = '';
+                document.getElementById('data').value = '';
+                document.getElementById('data-necessidade').value = '';
+
+                // Limpa a tabela de itens, mantendo apenas a primeira linha
+                const tabelaItens = document.getElementById('itens');
+                tabelaItens.innerHTML = `
+                    <tr>
+                        <td>1</td>
+                        <td><input type="text" name="descricao[]" required style="width: 100%;"></td>
+                        <td>
+                            <button type="button" class="btn-icon" title="Adicionar texto complementar" onclick="Formulario.toggleTextoComplementar(this)" style="border: 1px solid #ccc; border-radius: 4px; padding: 5px;">📝</button>
+                        </td>
+                        <td><input type="number" name="quantidade[]" min="1" max="99999" required style="width: 80px;"></td>
+                        <td>
+                            <select name="unidade[]" required>
+                                <option value="UND">UND</option>
+                                <option value="CX">CX</option>
+                                <option value="FRD">FRD</option>
+                                <option value="KG">KG</option>
+                                <option value="MT">MT</option>
+                                <option value="PÇ">PÇ</option>
+                                <option value="PT">PT</option>
+                                <option value="LT">LT</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="button" class="btn-icon attach" title="Anexar" aria-label="Anexar arquivo" onclick="Formulario.anexarArquivo(this)">🖇️</button>
+                            <input type="file" name="anexo[]" accept=".pdf,.png,.jpeg,.jpg,.xlsx,.xlsm,.xls,.csv,.html" class="hidden">
+                        </td>
+                        <td>
+                            <button type="button" class="btn-icon remove" title="Remover" aria-label="Remover item" onclick="Formulario.excluirItem(this)">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+
+                // Limpa os dados temporários do localStorage
+                localStorage.removeItem('dadosTemporarios');
+            },
+
+            adicionarItem: function() {
+                const tabela = document.getElementById('itens');
+                const novaLinha = tabela.insertRow();
+                const numItens = tabela.rows.length;
+
+                novaLinha.innerHTML = `
+                    <td>${numItens}</td>
+                    <td><input type="text" name="descricao[]" required style="width: 100%;"></td>
+                    <td>
+                        <button type="button" class="btn-icon" title="Adicionar texto complementar" onclick="Formulario.toggleTextoComplementar(this)" style="border: 1px solid #ccc; border-radius: 4px; padding: 5px;">📝</button>
+                    </td>
+                    <td><input type="number" name="quantidade[]" min="1" max="99999" required style="width: 80px;"></td>
+                    <td>
+                        <select name="unidade[]" required>
+                            <option value="UND">UND</option>
+                            <option value="CX">CX</option>
+                            <option value="FRD">FRD</option>
+                            <option value="KG">KG</option>
+                            <option value="MT">MT</option>
+                            <option value="PÇ">PÇ</option>
+                            <option value="PT">PT</option>
+                            <option value="LT">LT</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button type="button" class="btn-icon attach" title="Anexar" aria-label="Anexar arquivo" onclick="Formulario.anexarArquivo(this)">🖇️</button>
+                        <input type="file" name="anexo[]" accept=".pdf,.png,.jpeg,.jpg,.xlsx,.xlsm,.xls,.csv,.html" class="hidden">
+                    </td>
+                    <td>
+                        <button type="button" class="btn-icon remove" title="Remover" aria-label="Remover item" onclick="Formulario.excluirItem(this)">🗑️</button>
+                    </td>
+                `;
+            },
+
+            toggleTextoComplementar: function(btn) {
+                const linha = btn.closest('tr');
+                let textoComplementarRow = linha.nextElementSibling;
+                
+                // Verifica se a próxima linha é a de texto complementar
+                if (textoComplementarRow && textoComplementarRow.classList.contains('texto-complementar')) {
+                    // Se o campo já existe, remove-o
+                    textoComplementarRow.remove();
+                } else {
+                    // Se o campo não existe, cria-o
+                    const novaLinha = document.createElement('tr');
+                    novaLinha.className = 'texto-complementar';
+                    novaLinha.innerHTML = `
+                        <td colspan="7">
+                            <textarea name="texto-complementar[]" placeholder="Texto complementar" style="width: 100%;"></textarea>
+                            <button type="button" class="btn-icon remove" title="Remover texto complementar" onclick="Formulario.removerTextoComplementar(this)" style="margin-top: 5px;">🗑️</button>
+                        </td>
+                    `;
+                    // Insere a nova linha logo após a linha do item
+                    linha.parentNode.insertBefore(novaLinha, linha.nextSibling);
+                }
+            },
+
+            removerTextoComplementar: function(btn) {
+                const linhaTextoComplementar = btn.closest('tr');
+                linhaTextoComplementar.remove();
+            },
+
+            excluirItem: function(btn) {
+                const linha = btn.closest('tr');
+                let textoComplementarRow = linha.nextElementSibling;
+
+                // Remove também a linha de texto complementar, se existir
+                if (textoComplementarRow && textoComplementarRow.classList.contains('texto-complementar')) {
+                    textoComplementarRow.remove();
+                }
+                
+                linha.remove();
+                this.atualizarNumeracaoItens();
+            },
+
+            atualizarNumeracaoItens: function() {
+                // Seleciona apenas as linhas que não são de texto complementar para numerar
+                const linhasItens = document.querySelectorAll('#itens tr:not(.texto-complementar)');
+                linhasItens.forEach((linha, index) => {
+                    const celulaItem = linha.querySelector('td:first-child');
+                    if (celulaItem) {
+                        celulaItem.textContent = index + 1;
+                    }
+                });
+            },
+
+            anexarArquivo: function(btn) {
+                const inputFile = btn.nextElementSibling;
+                inputFile.click();
+
+                inputFile.addEventListener('change', function() {
+                    if (inputFile.files.length > 0) {
+                        const file = inputFile.files[0];
+                        if (file.size > 5 * 1024 * 1024) { // 5MB
+                            Formulario.exibirMensagem("O arquivo não pode exceder 5MB.", "erro");
+                            inputFile.value = ''; // Limpa o arquivo selecionado
+                            btn.textContent = '🖇️';
+                        } else {
+                            const fileName = file.name;
+                            const nomeReduzido = fileName.length > 15 ? fileName.substring(0, 15) + '...' : fileName;
+                            btn.textContent = `🖇️ ${nomeReduzido}`;
+                        }
+                    }
+                });
+            },
+
+            // ==================================================================
+            // FUNÇÃO DE ENVIO MODIFICADA PARA USAR mailto:
+            // ==================================================================
+            enviarFormulario: function(event) {
+                event.preventDefault();
+
+                if (!this.validarEmail()) return;
+
+                const confirmacao = confirm("Você confirma as informações da solicitação? \n\nObs: Seu cliente de e-mail (Outlook) será aberto para o envio.");
+                if (!confirmacao) return;
+
+                // --- Coleta de dados ---
+                const itens = Array.from(document.querySelectorAll('#itens tr:not(.texto-complementar)')).map(linha => {
+                    let textoComplementarEl = linha.nextElementSibling;
+                    let textoComplementar = '';
+                    if (textoComplementarEl && textoComplementarEl.classList.contains('texto-complementar')) {
+                        textoComplementar = textoComplementarEl.querySelector('textarea').value;
+                    }
+
+                    return {
+                        descricao: linha.querySelector('input[name="descricao[]"]').value,
+                        quantidade: linha.querySelector('input[name="quantidade[]"]').value,
+                        unidade: linha.querySelector('select[name="unidade[]"]').value,
+                        textoComplementar: textoComplementar
+                    };
+                });
+
+                const dadosSolicitacao = {
+                    numeroSC: document.getElementById('numero-sc').value,
+                    data: new Date(document.getElementById('data').value).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    projeto: document.getElementById('projeto').value,
+                    tipoSolicitacao: document.getElementById('tipo-solicitacao').value,
+                    solicitante: document.getElementById('solicitante').value,
+                    email: document.getElementById('email').value,
+                    departamento: document.getElementById('departamento').value,
+                    localEntrega: document.getElementById('local-entrega').value,
+                    dataNecessidade: new Date(document.getElementById('data-necessidade').value).toLocaleDateString('pt-BR', { timeZone: 'UTC' }),
+                    justificativa: document.getElementById('justificativa').value,
+                };
+
+                // --- Construção do corpo e assunto do e-mail ---
+                const emailDestinatario = 'email.compras@suaempresa.com'; // Altere para o e-mail real do setor de compras
+
+                const assunto = `Nova Solicitação de Compra - ${dadosSolicitacao.projeto} - Solicitante: ${dadosSolicitacao.solicitante}`;
+
+                let corpoEmail = `Olá,
+\nUma nova solicitação de compra foi registrada. Seguem os detalhes:
+\n\nDETALHES DA SOLICITAÇÃO:
+\n- Nº da SC: ${dadosSolicitacao.numeroSC}
+- Data da Solicitação: ${dadosSolicitacao.data}
+- Solicitante: ${dadosSolicitacao.solicitante} (${dadosSolicitacao.email})
+- Departamento: ${dadosSolicitacao.departamento}
+- Projeto (OS): ${dadosSolicitacao.projeto}
+- Tipo: ${dadosSolicitacao.tipoSolicitacao}
+- Data de Necessidade: ${dadosSolicitacao.dataNecessidade}
+- Local de Entrega: ${dadosSolicitacao.localEntrega}
+`;
+
+                if (dadosSolicitacao.justificativa) {
+                    corpoEmail += `\n\nJustificativa da Urgência:\n${dadosSolicitacao.justificativa}\n`;
+                }
+
+                corpoEmail += `\n\nITENS:\n--------------------------------------------------\n`;
+
+                itens.forEach(item => {
+                    corpoEmail += `
+- Descrição: ${item.descricao}
+- Quantidade: ${item.quantidade} ${item.unidade}
+- Texto Complementar: ${item.textoComplementar || 'N/A'}
+--------------------------------------------------\n`;
+                });
+
+                corpoEmail += `\nAtenciosamente,\nSistema de Solicitação de Compras.\n`;
+
+                // --- Criação e ativação do link mailto ---
+                const mailtoLink = `mailto:${emailDestinatario}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpoEmail)}`;
+
+                window.location.href = mailtoLink;
+                
+                // Bloqueia o formulário e exibe a mensagem de sucesso
+                const botaoEnviar = document.getElementById('botao-enviar');
+                botaoEnviar.style.display = 'none';
+
+                const botaoEnviado = document.createElement('button');
+                botaoEnviado.type = 'button';
+                botaoEnviado.className = 'styled-button confirm';
+                botaoEnviado.textContent = 'Ação de Envio Iniciada';
+                botaoEnviado.disabled = true;
+                document.querySelector('.button-container').appendChild(botaoEnviado);
+
+                document.getElementById('form-solicitacao').classList.add('formulario-bloqueado');
+                this.exibirMensagem("Verifique seu cliente de e-mail para concluir o envio.", "sucesso");
+            },
+            // ==================================================================
+            // FIM DA FUNÇÃO MODIFICADA
+            // ==================================================================
+
+            exibirMensagem: function(mensagem, tipo) {
+                const divMensagem = document.createElement('div');
+                divMensagem.className = `mensagem ${tipo}`;
+                divMensagem.textContent = mensagem;
+                document.body.appendChild(divMensagem);
+                setTimeout(() => divMensagem.remove(), 3000);
+            },
+
+            validarEmail: function() {
+                const email = document.getElementById('email').value;
+                const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!regexEmail.test(email)) {
+                    this.exibirMensagem("Por favor, insira um e-mail válido.", "erro");
+                    return false;
+                }
+                return true;
+            },
+
+            salvarDadosTemporarios: function() {
+                const dados = {
+                    projeto: document.getElementById('projeto').value,
+                    tipoSolicitacao: document.getElementById('tipo-solicitacao').value,
+                    solicitante: document.getElementById('solicitante').value,
+                    email: document.getElementById('email').value,
+                    departamento: document.getElementById('departamento').value,
+                    localEntrega: document.getElementById('local-entrega').value,
+                    dataNecessidade: document.getElementById('data-necessidade').value,
+                    justificativa: document.getElementById('justificativa').value,
+                    itens: Array.from(document.querySelectorAll('#itens tr')).map(linha => ({
+                        descricao: linha.querySelector('input[name="descricao[]"]')?.value,
+                        quantidade: linha.querySelector('input[name="quantidade[]"]')?.value,
+                        unidade: linha.querySelector('select[name="unidade[]"]')?.value,
+                        textoComplementar: linha.querySelector('textarea[name="texto-complementar[]"]')?.value || '',
+                        anexo: linha.querySelector('input[name="anexo[]"]')?.files[0]?.name || ''
+                    }))
+                };
+                localStorage.setItem('dadosTemporarios', JSON.stringify(dados));
+            },
+
+            carregarDadosTemporarios: function() {
+                const dados = JSON.parse(localStorage.getItem('dadosTemporarios'));
+                if (dados && dados.projeto) { // Verifica se há dados para carregar
+                    document.getElementById('projeto').value = dados.projeto;
+                    document.getElementById('tipo-solicitacao').value = dados.tipoSolicitacao;
+                    document.getElementById('solicitante').value = dados.solicitante;
+                    document.getElementById('email').value = dados.email;
+                    document.getElementById('departamento').value = dados.departamento;
+                    document.getElementById('local-entrega').value = dados.localEntrega;
+                    document.getElementById('data-necessidade').value = dados.dataNecessidade;
+                    document.getElementById('justificativa').value = dados.justificativa;
+
+                    const tabelaItens = document.getElementById('itens');
+                    tabelaItens.innerHTML = ''; // Limpa a tabela antes de carregar
+
+                    dados.itens.forEach((item, index) => {
+                        // Ignora linhas que podem ser de texto complementar salvas erroneamente
+                        if (!item.descricao) return;
+
+                        this.adicionarItem();
+                        const linha = document.querySelectorAll('#itens tr:not(.texto-complementar)')[index];
+                        if(linha) {
+                            linha.querySelector('input[name="descricao[]"]').value = item.descricao;
+                            linha.querySelector('input[name="quantidade[]"]').value = item.quantidade;
+                            linha.querySelector('select[name="unidade[]"]').value = item.unidade;
+                            if (item.textoComplementar) {
+                                this.toggleTextoComplementar(linha.querySelector('.btn-icon'));
+                                let textoCompRow = linha.nextElementSibling;
+                                if(textoCompRow && textoCompRow.classList.contains('texto-complementar')){
+                                    textoCompRow.querySelector('textarea').value = item.textoComplementar;
+                                }
+                            }
+                            if (item.anexo) {
+                                linha.querySelector('.btn-icon.attach').textContent = `🖇️ ${item.anexo}`;
+                            }
+                        }
+                    });
+                }
+            }
+        };
+
+        const Validacao = {
+            // Feriados de Aracruz/ES para 2025 (exemplos)
+            feriados: [
+                "2025-01-01", // Ano Novo
+                "2025-03-03", // Carnaval
+                "2025-03-04", // Carnaval
+                "2025-04-03", // Aniversário de Aracruz
+                "2025-04-18", // Paixão de Cristo
+                "2025-04-21", // Tiradentes
+                "2025-05-01", // Dia do Trabalho
+                "2025-06-19", // Corpus Christi
+                "2025-09-07", // Independência do Brasil
+                "2025-10-12", // Nossa Senhora Aparecida
+                "2025-11-02", // Finados
+                "2025-11-15", // Proclamação da República
+                "2025-12-25", // Natal
+            ],
+
+            // Verifica se uma data é feriado
+            isFeriado: function(data) {
+                const dataFormatada = data.toISOString().split('T')[0];
+                return this.feriados.includes(dataFormatada);
+            },
+
+            // Verifica se uma data é fim de semana
+            isFimDeSemana: function(data) {
+                const diaDaSemana = data.getUTCDay();
+                return diaDaSemana === 0 || diaDaSemana === 6; // 0 = Domingo, 6 = Sábado
+            },
+
+            // Calcula a próxima data útil
+            calcularProximaDataUtil: function(data, diasUteis) {
+                let dataCalculada = new Date(data.valueOf());
+                let contador = 0;
+                while (contador < diasUteis) {
+                    dataCalculada.setDate(dataCalculada.getDate() + 1);
+                    if (!this.isFeriado(dataCalculada) && !this.isFimDeSemana(dataCalculada)) {
+                        contador++;
+                    }
+                }
+                return dataCalculada;
+            },
+
+            validarNumeroProjeto: function() {
+                const numeroProjeto = document.getElementById('projeto').value;
+                const regex = /^\d{3}\/\d{2}$/; // Formato 000/00
+                const erroProjeto = document.getElementById('erro-projeto');
+
+                if (!regex.test(numeroProjeto)) {
+                    erroProjeto.classList.remove('hidden');
+                    return false;
+                } else {
+                    erroProjeto.classList.add('hidden');
+                    return true;
+                }
+            },
+
+            validarTipoSolicitacao: function() {
+                const tipoSolicitacao = document.getElementById('tipo-solicitacao').value;
+                const justificativaUrgencia = document.getElementById('justificativa-urgencia');
+                const campoJustificativa = document.getElementById('justificativa');
+
+                if (tipoSolicitacao === 'urgente') {
+                    justificativaUrgencia.classList.remove('hidden');
+                    campoJustificativa.required = true;
+                } else {
+                    justificativaUrgencia.classList.add('hidden');
+                    campoJustificativa.required = false;
+                    campoJustificativa.value = '';
+                }
+            },
+
+            validarDataNecessidade: function() {
+                const dataNecessidadeInput = document.getElementById('data-necessidade').value;
+                if (!dataNecessidadeInput) return true; // Não valida se estiver vazio
+
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0); // Zera a hora para comparar apenas a data
+
+                // Adiciona o fuso horário para evitar problemas de um dia a menos
+                const dataNecessidadeObj = new Date(dataNecessidadeInput + 'T00:00:00-03:00'); 
+                const tipoSolicitacao = document.getElementById('tipo-solicitacao').value;
+
+                if (dataNecessidadeObj < hoje) {
+                    Formulario.exibirMensagem("A data de necessidade não pode ser anterior à data atual.", "erro");
+                    document.getElementById('data-necessidade').value = '';
+                    return false;
+                }
+
+                if (tipoSolicitacao === 'normal') {
+                    const dataMinimaNormal = this.calcularProximaDataUtil(new Date(hoje), 6);
+                    if (dataNecessidadeObj < dataMinimaNormal) {
+                        document.getElementById('tipo-solicitacao').value = 'urgente';
+                        this.validarTipoSolicitacao(); // Chama a função para exibir o campo de justificativa
+                        Formulario.exibirMensagem("Prazo inferior a 6 dias úteis. A solicitação foi alterada para 'Urgente'. Por favor, preencha a justificativa.", "erro");
+                    }
+                }
+
+                return true;
+            }
+        };
+
+        // Salvar dados ao sair da página
+        window.addEventListener('beforeunload', Formulario.salvarDadosTemporarios);
+
+        // Limpar dados temporários ao clicar em "Limpar Tudo"
+        document.querySelector('.styled-button.clear').addEventListener('click', () => {
+            localStorage.removeItem('dadosTemporarios');
+            Formulario.limparCampos(); // Garante que a interface também seja limpa
+        });
+
+        // Carregar dados ao abrir o formulário
+        document.addEventListener('DOMContentLoaded', () => {
+            Formulario.carregarDadosTemporarios();
+            // Limpa o storage após carregar para não carregar dados antigos em uma nova sessão
+            localStorage.removeItem('dadosTemporarios'); 
+        });
+    </script>
+</body>
+</html>

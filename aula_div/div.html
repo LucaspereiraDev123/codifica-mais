@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+    <title>Divisões</title>
+    <style>
+        .caixa-principal{
+            background-color: #f8f9fa;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+        }
+        table{
+        width: 100%;
+         border-collapse: collapse; /* Remove o espaçamento
+            entre as células */
+         }
+         th, td {
+         border: 1px solid #ddd;
+         padding: 8px;
+         text-align: left;
+         }
+         tr:nth-child(even) { /* Estiliza linhas pares */
+         background-color: #f2f2f2;
+         }
+         th {
+         background-color: #343a40;
+         color: white;
+         }
+
+        input[type="text"] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        /*Garante que padding e borda não aumentem a largura*/
+        box-sizing: border-box;
+        }
+        button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        border: none;
+        cursor: pointer;
+        }
+        button:hover {
+        opacity: 0.8;
+        } 
+
+    </style>
+</head>
+<body>
+    <div class="caixa-principal">   
+        <h3>Minhas divisões</h3>
+        <p>Este conteudo esta dentro da divisão</p>
+
+    </div>
+
+    <table>
+        <tr>
+            <th>Nome</th>
+            <th>Idade</th>
+        </tr>
+        <tr>
+            <td>João</td>
+            <td>25</td>
+        </tr>
+        <tr>
+            <td>Felipe</td>
+            <td>34</td>
+        </tr>
+    </table>
+
+
+    <h3>Formulário</h3>
+    <form action="/submit" method="post">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome">
+
+        <label for="celular">Celular: </label>
+        <imput type="text" id="celular" name="celular">
+        <button type="submit">Enviar</button>
+
+        </imput>
+
+    </form>
+
+</body>
+    
+        

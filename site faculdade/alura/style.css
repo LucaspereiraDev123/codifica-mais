@@ -1,0 +1,29 @@
+body {
+    background-color: black;
+    color: white
+}
+
+h1 {
+    color: #333333;
+}
+
+a{
+    background-color: rgb(48, 9, 224);
+    color: white;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+header{
+    background-color: rgb(48, 9, 224);
+    height: 100px;
+}
+
+p{
+    color:darkgray;
+}
+
+footer{
+    background-color: rgb(48, 9, 224);
+    height: 100px;
+}
