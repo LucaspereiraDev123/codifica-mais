@@ -1,0 +1,128 @@
+:root {
+    font-size: 10px;
+}
+
+/*Aqui ele esta retirando algumas formações padrão do html */
+* {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: 0.2s linear;
+}
+
+.header {
+    display: flex;
+    flex-direction: column; /* organiza os filhos em coluna */
+    justify-content: space-between; /* separa os 3 blocos: logo | menu | ícones */
+    align-items: center;
+    /*border-bottom: 1px solid #ffffff;*/
+    padding: 5px 20px;
+    position: relative; /* necessário caso use absolute */
+    
+}
+
+.anuncio-topo {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    color: black;
+    background-color: white;
+    width: 100vw;
+    text-align: center;
+    justify-content: center;
+
+    
+}
+
+.logo-buscar-favorito-login {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;}
+
+
+.favorito-login-carrinho {
+    display: flex;
+    
+}
+
+.logo-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%); /* centraliza o menu na tela */
+    display: flex;
+    gap: 20px;
+}
+
+.menu {
+    font-size: 20px;
+    color: white;
+    text-align: center;
+
+}
+
+/* Isso garante que mesmo que o texto tenha espaços, ele fique sempre em uma única linha.*/
+a.menu {
+    white-space: nowrap;
+}
+
+/*1. Mudança de cor simples com suavidade e mudança de tamanho na transição*/
+a:hover.menu {
+    color: orange;
+    position: relative; /* necessário para o ::after ficar preso ao link */
+    display: inline-block; /* garante que o ::after siga só o tamanho do link */ 
+    
+}
+
+a::after.menu {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0;
+    height: 2px;
+    background: orange;
+    transition: width 0.3s ease;
+    transform: scaleX(0);           /* começa invisível */
+    transform-origin: center;       /* a linha "cresce" do centro */
+}
+
+/*tamanho da linha*/
+a:hover::after.menu {
+    width: 100%;
+    transform: scaleX(1);           /* linha visível */
+}
+
+body {
+    background-color:black;
+}
+
+.logo{
+    height: 100px;
+    width: auto;
+}
+
+.icons {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    margin: 2rem;
+}
+
+/* Isso garante que mesmo que o texto tenha espaços, ele fique sempre em uma única linha.*/
+
+
+
+
+
+
+
