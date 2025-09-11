@@ -21,32 +21,76 @@
     /*border-bottom: 1px solid #ffffff;*/
     padding: 5px 20px;
     position: relative; /* necessário caso use absolute */
+    font-family: "Roboto";
+    margin: 0 2%;
+    padding: 0;
+    gap: 10px;  
+    
     
 }
 
 .anuncio-topo {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 8px;
     color: black;
     background-color: white;
     width: 100vw;
     text-align: center;
     justify-content: center;
+    font-family: "Roboto";
+    font-weight: 800;
+    font-size: 16px;
 
-    
 }
 
 .logo-buscar-favorito-login {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;}
+    width: 100%;
+    
+}
 
+.buscar{
+    display: flex;
+    align-items: center;
+    justify-content: center; /* centraliza horizontalmente se necessário */
+    margin: 20px;
+}
+
+
+.buscar input[type="text"] {
+    padding: 10px 20px;
+    border: 2px solid #ccc;
+    outline: none;
+    width: 250px;
+    transition: all 0.3s ease;
+}
+
+.buscar input[type="text"]:focus {
+  border-color: orange;
+  
+}
+
+.buscar button {
+  padding: 10px 20px;
+  border: 2px solid #ffffff;
+  border-left: none; /* remove borda entre input e botão */
+  background-color: #ffffff;
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.buscar button:hover {
+  background-color: #dfcece;
+}
 
 .favorito-login-carrinho {
     display: flex;
-    
+    gap: 20px;
+
 }
 
 .logo-nav {
@@ -67,6 +111,7 @@ nav {
     font-size: 20px;
     color: white;
     text-align: center;
+    
 
 }
 
@@ -103,7 +148,10 @@ a:hover::after.menu {
 }
 
 body {
-    background-color:black;
+    background-color: #111; /* cinza bem escuro em vez de preto chapado */
+    color: #f1f1f1;
+    font-family: "Roboto";
+
 }
 
 .logo{
