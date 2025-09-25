@@ -3,7 +3,7 @@
 echo "Digite um número: ";
 $numero = trim(fgets(STDIN));
 
-echo "digite outro número: ";
+echo "Digite outro número: ";
 $numero2 = trim(fgets(STDIN));  
 
 $soma = $numero + $numero2;
