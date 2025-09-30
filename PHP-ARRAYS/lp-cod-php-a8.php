@@ -12,9 +12,9 @@ function aplicarDesconto($valorCompra, $percentualDesconto)
 function calcularDescontoProgressivo($valorCompra)
 {
     if($valorCompra < 100){
-        echo "Sem desconto";
+        return "Sem desconto";
 
-    } elseif ($valorCompra >= 100 || $valorCompra <=500){
+    } elseif ($valorCompra >= 100 && $valorCompra <=500){
         return aplicarDesconto($valorCompra, 10);
 
     } else {
@@ -23,7 +23,12 @@ function calcularDescontoProgressivo($valorCompra)
 
 }   
 
-echo "Sua compra com o desconto fixo: " . aplicarDesconto($valorCompra, $percentualDesconto) .PHP_EOL;
+if ($valorCompra < 100){
+    echo calcularDescontoProgressivo($valorCompra) .PHP_EOL;
 
-echo "Sua compra com o desconto progessivo: " . calcularDescontoProgressivo($valorCompra) .PHP_EOL;
+} else {
+    echo "Seu desconto é de: " . calcularDescontoProgressivo($valorCompra) .PHP_EOL;
+}
+
+
 
