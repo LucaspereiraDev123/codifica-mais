@@ -1,0 +1,5 @@
+{
+    "require": {
+        "humble23/cartola-fc-api": "^1.2"
+    }
+}
