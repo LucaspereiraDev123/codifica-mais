@@ -1,0 +1,15 @@
+{
+    "name": "lucas/pdo-a1",
+    "autoload": {
+        "psr-4": {
+            "Lucas\\PdoA1\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lucas",
+            "email": "lucas.rocha9@outlook.com"
+        }
+    ],
+    "require": {}
+}
