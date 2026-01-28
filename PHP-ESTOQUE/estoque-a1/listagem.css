@@ -1,0 +1,172 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: #32C2B9;
+}
+
+main {
+    flex: 1;
+}
+
+.cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #00686C;
+    height: 5rem;
+    width: 100%;
+    padding: 0 1.5rem;
+
+}
+
+.cabecalho-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+    width: 10rem;
+}
+
+.cabecalho-logo-imagem {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.cabecalho-titulo {
+    font-weight: 700;
+    font-size: 2rem;
+    margin: 0;
+}
+
+.cabecalho-titulo p{
+    margin-right: 20rem;
+}
+
+.cabecalho-formulario-pesquisar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20rem;
+    height: 2rem;
+    margin-right: 10.5rem;
+    padding: 0.5rem;
+    border-color: #EDECB3;
+}
+
+.cabecalho-formulario-pesquisar {
+    display: flex;
+    align-items: center;
+}
+
+.cabecalho-formulario-pesquisar input {
+    float: left;
+    background-color: #EDECB3;
+    padding-left: 5px;
+    font-size: 18px;
+    border: 1rem;
+    border-radius: 0.5rem 0 0 0.5rem;
+    height: 2rem;
+    width: 18rem;
+}
+
+.cabecalho-formulario-pesquisar-botaoBuscar {
+    background-color: #EDECB3;
+    border: none;
+    cursor: pointer;
+    border-radius: 0 0.5rem 0.5rem 0;
+    height: 32px;
+    width: 32px;
+}
+
+.cabecalho-formulario-pesquisar-botaoBuscar img{
+    height: 32px;
+    width: 32px;
+}
+
+.principal {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    background-color: #32C2B9;
+    padding: 2rem;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+}
+
+.principal a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.principal-card-produto {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    margin: 0;
+    width: 100%;
+    max-width: 720px;
+    border-radius: 10px;
+    background-color: #EDECB3;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.principal-card-produto-imagem {
+    order: 2;
+    width: 6.5rem;
+    height: 6.5rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.principal-card-produto-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 6px;
+    display: block;
+}
+
+.principal-card-produto-imagem .placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: #cfc9a0;
+    border-radius: 6px;
+}
+
+.principal-card-produto-info {
+    order: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 16px;
+    flex: 1 1 auto;
+}
+
+.principal-vazio {
+    text-align: center;
+    margin-top: 4rem;
+    font-size: 1.2rem;
+    color: #444;
+}
+
+.rodape {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00686C;
+    height: 5rem;
+    width: 100vw;
+    border: 0.2rem;
+}

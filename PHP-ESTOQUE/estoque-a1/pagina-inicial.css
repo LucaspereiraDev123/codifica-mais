@@ -1,0 +1,108 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body{
+    background-color: #32C2B9;
+}
+
+.cabecalho {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00686C;
+    height: 5rem;
+    width: 100vw;
+    border: 0.2rem;
+}
+
+.cabecalho-titulo {
+    font-weight: 700;
+    font-size: 2rem;
+    margin-right: 8rem;
+    margin-left: 30rem;
+}
+
+.cabecalho-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 2rem;
+    width: 10rem;
+    margin-left: 10rem;
+}
+
+.cabecalho-logo-imagem {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.principal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    height: 438.5px;
+}
+
+.principal-menu {
+    background-color: #00686C;
+    height: 18rem;
+    width: 25rem;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+}
+
+.principal-menu-cadastro{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #EDECB3;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 12px;
+}
+
+.principal-menu-cadastro-botao{
+    text-decoration: none;
+    color:black;
+}
+
+.principal-menu-cadastro-botao:hover {
+    color: #00686C;
+}
+
+.principal-menu-listagem{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #EDECB3;
+    width: 7rem;
+    height: 7rem;
+    border-radius: 12px;
+}
+
+.principal-menu-listagem-botao{
+    text-decoration: none;
+    color:black;
+}
+
+.principal-menu-listagem-botao:hover{
+    color: #00686C;
+}
+
+.rodape{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #00686C;
+    height: 5rem;
+    width: 100vw;
+    border: 0.2rem;
+}
