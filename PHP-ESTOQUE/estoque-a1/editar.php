@@ -13,29 +13,70 @@ $produtos = $statement->fetchAll(PDO::FETCH_ASSOC);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $codigo = $_POST['codigo'];
-    $nome = $_POST['nome'];
+    $nome = trim($_POST['nome']);
     $quantidade = $_POST['quantidade'];
     $volume = $_POST['volume'];
     $fornecedor = $_POST['fornecedor'];
     $valor = $_POST['valor'];
     $image = $_FILES['imagem']['name'];
     $acao = $_POST['acao'];
+    
+    if (empty($codigo) || $codigo <= 0) {
+        $arquivo = fopen("erros-a1/erros.log", "a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Codigo: $codigo invalido\n");
+        fclose($arquivo);
+        header('location: cadastrar.php');
+        exit();
+    }
 
+    if (empty($nome)) {
+        $arquivo = fopen("erros-a1/erros.log", "a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Nome: $nome invalido\n");
+        fclose($arquivo);
+        header('location: cadastrar.php');
+        exit();
+    }
+
+    if ($quantidade < 0) {
+        $arquivo = fopen("erros-a1/erros.log" ,"a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Quantidade: $quantidade invalida\n");
+        fclose($arquivo);
+        header('Location: cadastrar.php');
+        exit();
+    }
+
+    if ($volume < 0) {
+        $arquivo = fopen("erros-a1/erros.log" ,"a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Volume: $volume invalido\n");
+        fclose($arquivo);
+        header('Location: cadastrar.php');
+        exit();
+    }
+
+    if ($valor <= 0) {
+        $arquivo = fopen("erros-a1/erros.log" ,"a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Valor: $valor invalido\n");
+        fclose($arquivo);
+        header('Location: cadastrar.php');
+        exit();
+    }
+        
     if($acao === 'salvar') {
         $sql = "UPDATE produtos SET nome = :nome, quantidade = :quantidade, volume = :volume, fornecedor = :fornecedor, valor= :valor, image_url = :imagem WHERE codigo = :codigo";
         $statement = $pdo->prepare($sql);
-        $statement->bindValue('nome', $nome);
-        $statement->bindValue('quantidade', $quantidade, PDO::PARAM_INT);
-        $statement->bindValue('volume', $volume, PDO::PARAM_INT);
-        $statement->bindValue('fornecedor', $fornecedor);
-        $statement->bindValue('valor', $valor);
-        $statement->bindValue('imagem', $image);
+        $statement->bindValue(':nome', $nome);
+        $statement->bindValue(':quantidade', $quantidade, PDO::PARAM_INT);
+        $statement->bindValue(':volume', $volume, PDO::PARAM_INT);
+        $statement->bindValue(':fornecedor', $fornecedor);
+        $statement->bindValue(':valor', $valor);
+        $statement->bindValue(':imagem', $image);
         $statement->bindValue(':codigo', $codigo);
     
         $statement->execute();
-    
+        
         header('Location: listagem.php');
         exit;
+
     } 
 
     if ($acao === 'excluir') {
@@ -83,19 +124,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="hidden" name="codigo" value="<?= $produto['codigo'] ?>">
                     <div class="principal-formulario-campo">
                         <label for="numero">Código</label>
-                        <input type="number" id="numero" name="codigo" value="<?= $produto['codigo'] ?>" required>
+                        <input type="number" id="numero" name="codigo" value="<?= $produto['codigo'] ?>" min="0" required>
                     </div>
                     <div class="principal-formulario-campo">
                         <label for="texto">Nome do Produto</label>
                         <input type="text" name="nome" value="<?= $produto['nome'] ?>" required>
                     </div>
+                    <script src="erros-a1/script.js"></script>
                     <div class="principal-formulario-campo">
                         <label for="numero">Quantidade</label>
-                        <input type="number" name="quantidade" value="<?= $produto['quantidade'] ?>" required>
+                        <input type="number" name="quantidade" value="<?= $produto['quantidade'] ?>" min="1" required>
                     </div>
                     <div class="principal-formulario-campo">
                         <label for="numero">Volume</label>
-                        <input type="number" name="volume" value="<?= $produto['volume'] ?>" required>
+                        <input type="number" name="volume" value="<?= $produto['volume'] ?>" min="1" required>
                     </div>
                     <div class="principal-formulario-campo">
                         <label for="numero">Fornecedor</label>
@@ -103,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="principal-formulario-campo">
                         <label for="numero">Valor (R$)</label>
-                        <input type="number" name="valor" value="<?= $produto['valor'] ?>">
+                        <input type="number" name="valor" value="<?= $produto['valor'] ?>" min="1" requires>
                     </div>
                     <div class="principal-formulario-botao-acoes">
                         <input type="file" name=imagem accept="image/*">

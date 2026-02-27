@@ -5,13 +5,52 @@ require 'conexao-db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $codigo = $_POST['codigo'];
-    $nome = $_POST['nome'];
+    $nome = trim($_POST['nome']);
     $quantidade = $_POST['quantidade'];
     $volume = $_POST['volume'];
     $fornecedor = $_POST['fornecedor'];
     $valor = $_POST['valor'];
     $image = $_FILES['imagem'];
 
+    if (empty($codigo) || $codigo <= 0) {
+        $arquivo = fopen("erros-a1/erros.log", "a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Codigo: $codigo invalido\n");
+        fclose($arquivo);
+        header('location: cadastrar.php');
+        exit();
+    }
+
+    if (empty($nome)) {
+        $arquivo = fopen("erros-a1/erros.log", "a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Nome: $nome invalido\n");
+        fclose($arquivo);
+        header('location: cadastrar.php');
+        exit();
+    }
+
+    if ($quantidade < 0) {
+        $arquivo = fopen("erros-a1/erros.log" ,"a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Quantidade: $quantidade invalida\n");
+        fclose($arquivo);
+        header('Location: cadastrar.php');
+        exit();
+    }
+
+    if ($volume < 0) {
+        $arquivo = fopen("erros-a1/erros.log" ,"a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Volume: $volume invalido\n");
+        fclose($arquivo);
+        header('Location: cadastrar.php');
+        exit();
+    }
+
+    if ($valor <= 0) {
+        $arquivo = fopen("erros-a1/erros.log" ,"a");
+        fwrite($arquivo, "[" . date("d/m/Y H:i:s") . "] Valor: $valor invalido\n");
+        fclose($arquivo);
+        header('Location: cadastrar.php');
+        exit();
+    }
 
     $sql = "INSERT INTO produtos (codigo, nome, quantidade, volume, fornecedor, valor, image_url) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $statement = $pdo->prepare($sql);
@@ -25,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $statement->execute();
 
-    header('Location: cadastrar.php?sucesso=1');
+    header('Location: cadastrar.php');
     exit;
 }
 
@@ -62,19 +101,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form class="principal-formulario" action="cadastrar.php" method="post" enctype="multipart/form-data">
                 <div class="principal-formulario-campo">
                     <label for="codigo">Código</label>
-                    <input type="number" id="codigo" name="codigo" placeholder="Ex: 001" required>
+                    <input type="number" id="codigo" name="codigo" placeholder="Ex: 001" min="0" required>
                 </div>
                 <div class="principal-formulario-campo">
                     <label for="nome">Nome do Produto</label>
                     <input type="text" id="nome" name="nome" placeholder="Ex: Camisa do bob esponja" required>
                 </div>
+                <script src="erros-a1/script.js"></script>
                 <div class="principal-formulario-campo">
                     <label for="quantidade">Quantidade</label>
-                    <input type="number" id="quantidade" name="quantidade" placeholder="Ex: 10" required>
+                    <input type="number" id="quantidade" name="quantidade" placeholder="Ex: 10" min="0" required>
                 </div>
                 <div class="principal-formulario-campo">
                     <label for="volume">Volume</label>
-                    <input type="number" id="volume" name="volume" placeholder="Ex: 20" required>
+                    <input type="number" id="volume" name="volume" placeholder="Ex: 20" min="1" required>
                 </div>
                 <div class="principal-formulario-campo">
                     <label for="fornecedor">Fornecedor</label>
@@ -82,7 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="principal-formulario-campo">
                     <label for="valor">Valor (R$)</label>
-                    <input type="number" id="valor" name="valor" placeholder="100">
+                    <input type="number" id="valor" name="valor" min="1" placeholder="100" required>
                 </div>
                 <input type="file" name=imagem accept="image/*">
                 <button class="principal-formulario-botao" type="submit"></button>

@@ -74,7 +74,7 @@ if ($nomeDoProduto !== '') {
             <?php endif; ?>
             <?php foreach ($produtos as $produto): ?>
                 <div class="principal-card-produto">
-                    <a href="editar.php?codigo=<?= $produto['codigo'] ?>">
+                    <a href="editar.php?codigo=<?= $produto['codigo'] ?>"> 
                         <div class="principal-card-produto-info">
                             <p><strong>Código:</strong> <?= $produto['codigo'] ?></p>
                             <p><strong>Nome:</strong> <?= $produto['nome'] ?></p>
