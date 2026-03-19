@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="fundo">
+        <div class="fundo-conteudo">
+            <div class="fundo-conteudo-reparticao1">
+                <form action="" id="formulario">
+                    <div class="fundo-conteudo-reparticao1-opcoes">
+                        <label>Adicionar Produto</label>
+                    </div>
+                    <div class="fundo-conteudo-reparticao1-opcoes">
+                        <label for="titulo">Título</label>
+                        <input id="titulo" name="titulo">
+                    </div>
+
+                    <div class="fundo-conteudo-reparticao1-opcoes">
+                        <label for="descricao">Descrição</label>
+                        <input maxlength="20" id="descricao" name="descricao">
+                    </div>
+
+                    <div class="fundo-conteudo-reparticao1-opcoes">
+                        <label for="categoria">Categoria</label>
+                        <select id="categoria" name="catogoria">
+                            <option value="">Selecione...</option>
+                            <option value="Estudos">Estudos</option>
+                            <option value="Trabalho">Trabalho</option>
+                            <option value="Pessoal">Pessoal</option>
+                        </select>
+                    </div>
+
+                    <div class="fundo-conteudo-reparticao1-opcoes">
+                        <label for="prioridade">Prioridade</label>
+                        <select id="prioridade" name="prioridade" required>
+                            <option value="">Selecione...</option>
+                            <option value="Alta">Alta</option>
+                            <option value="Média">Média</option>
+                            <option value="Baixa">Baixa</option>
+                        </select>
+                    </div>
+
+                    <div class="fundo-conteudo-reparticao1-opcoes">
+                        <button type="submit">Enviar</button>
+                    </div>
+                </form>
+
+                <!-- Área de filtro -->
+                <div class="fundo-conteudo-reparticao1-filtro">
+                    <label>Filtro</label>
+                    <select id="filtroCategoria">
+                        <option value="">Todas Categorias</option>
+                        <option value="Estudos">Estudos</option>
+                        <option value="Trabalho">Trabalho</option>
+                        <option value="Pessoal">Pessoal</option>
+                    </select>
+
+                    <select id="filtroPrioridade">
+                        <option value="">Todas Prioridades</option>
+                        <option value="Alta">Alta</option>
+                        <option value="Média">Média</option>
+                        <option value="Baixa">Baixa</option>
+                    </select>
+                </div>
+
+                <!-- Área da ordem -->
+                <div class="fundo-conteudo-reparticao1-ordem">
+                    <label>Ordenar por:</label>
+                    <select id="ordem">
+                        <option value="">Selecione...</option>
+                        <option value="Título">Título</option>
+                        <option value="Prioridade">Prioridade</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="fundo-conteudo-reparticao2">
+                <div id="produtos">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script>
+
+    //criação da lista vazia
+    let lista = [];
+
+    const produtos = document.querySelector('#produtos')
+
+    // Estrutura de filtro
+    //change = Execute essa função quando o valor do elemento mudar.
+    document.querySelector("#filtroCategoria")
+        .addEventListener("change", filtrar);
+
+    document.querySelector("#filtroPrioridade")
+        .addEventListener("change", filtrar);
+
+    function filtrar() {
+        const categoriaSelecionada = document.querySelector("#filtroCategoria").value;
+        const prioridadeSelecionada = document.querySelector("#filtroPrioridade").value;
+
+        const listaFiltrada = lista.filter(produto => {
+            const matchCategoria =
+                categoriaSelecionada === "" || produto.categoria === categoriaSelecionada;
+
+            const matchPrioridade =
+                prioridadeSelecionada === "" || produto.prioridade === prioridadeSelecionada;
+
+            return matchCategoria && matchPrioridade;
+        });
+
+        renderizar(listaFiltrada);
+    }
+
+    //criando um card com as informações dos produto de cada item do array
+    function renderizar(array) {
+        const cardHtml = array.map((produto, index) => `
+            <div class="fundo-conteudo-reparticao2-card">
+                <h3>Titulo: ${produto.titulo}</h3>
+                <p>Descrição: ${produto.descricao}</p>
+                <p>Categoria: ${produto.categoria}</p>
+                <p>Prioridade: ${produto.prioridade}</p>
+                <button type="button" onclick="deletar(${index})">Excluir</button>
+            </div>
+        `).join('');
+
+        produtos.innerHTML = cardHtml;
+    }
+
+    //Estrutura de deletar
+    //usar onclik para criar uma função para deletar
+    function deletar(index) 
+    {
+        lista.splice(index, 1);
+        renderizar(lista); 
+    }
+
+    //Estrutura de ordenação
+    document.querySelector("#ordem")
+        .addEventListener("change", ordenar);
+
+    function ordenar() 
+    {
+        const tipo = document.querySelector("#ordem").value;
+
+        if(tipo === "titulo") {
+            lista.sort((a, b) =>
+                a.titulo.localCompare(b.titulo)
+            );
+        }
+
+        if(tipo === "prioridade") {
+            const ordem = {
+                "Alta": 1,
+                "Média": 2,
+                "Baixa": 3
+            };
+
+            lista.sort((a, b) =>
+                ordem[a.prioridade - ordem[b.prioridade]]
+            );
+        }
+
+        renderizar(lista);
+    }
+
+    //armazenando dados do formulario
+    const form = document.querySelector("#formulario");
+    //função que esta lendo o evento
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const titulo = form.titulo.value
+        const descricao = form.descricao.value
+        const categoria = form.categoria.value
+        const prioridade = form.prioridade.value
+
+        //dados do formulario em uma variavel para chamar na função
+        const dados = { titulo, descricao, categoria, prioridade }
+        //função de armazenar no final da lista
+        lista.push(dados)
+
+        //chamada da funcção para carregar os dados do array
+        renderizar(lista);
+
+    })
+</script>
